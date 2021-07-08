@@ -3,22 +3,92 @@ new Vue({
     data: {
         player_heal: 100,
         monster_heal: 100,
-        game_is_on: false
+        logs : [],
+        game_is_on: false,
+        attack_multiple :  10,
+        special_attach_multiple : 25,
+        monster_attach_multiple : 10,
+        log_text: 
+        {
+            attack: "OYUNCU ATAĞI : ",
+            special_attack : "ÖZEL OYUNCU ATAĞI : ",
+            monster_attack : "CANAVAR ATAĞI : ",
+            heal_up : "İLK YARDIM!!!",
+            give_up : "OYUNCU PES ETTİ",
+        },
+
     },
     methods: {
         start_game: function () {
-            this.game_is_on = true
+            this.game_is_on = !this.game_is_on
         },
         attach: function () {
-
+            var point = Math.ceil(Math.random() * 10)
+            this.monster_heal -= point;
+            this.add_to_log({turn:"p",text : this.log_text.attack +point});
+            this.monster_attach();
         }, 
         special_attach: function () {
-
+            var point = Math.ceil(Math.random() * 25)
+            this.monster_heal -= point;
+            this.add_to_log({turn:"p",text : this.log_text.special_attack +point});
+            this.monster_attach();
+            
         },
         first_aid: function () {
-
+            var point = Math.ceil(Math.random() * 20)
+            this.player_heal += point;
+            this.add_to_log({turn:"p",text : this.log_text.heal_up});
+            this.monster_attach();
         },
         give_up: function () {
+            this.game_is_on = !this.game_is_on;
+            this.player_heal = 100;
+            this.monster_heal = 100;
+            this.add_to_log({turn:"p",text : this.log_text.give_up});
+            this.logs= [];
+        },
+        monster_attach : function(){
+            var point = Math.ceil(Math.random() * 10)
+            this.add_to_log({turn:"m",text : this.log_text.monster_attack +point});
+            this.player_heal -= point;
+        },
+        add_to_log: function(log){
+            this.logs.push(log);
+        }
+    },
+    watch  : {
+        player_heal : function(value){
+            if(value<= 0 ){
+                this.player_heal = 0;
+                if(confirm("Oyunu Kaybettin. Tekrar denemek ister misin ? ")) {
+                    this.player_heal = 100;
+                    this.monster_heal = 100;
+                }
+            }else if(value >= 100){
+                this.value = 100;
+            }
+        },
+        monster_heal : function(value){
+            if(value<= 0 ){
+                this.monster_heal = 0;
+                if(confirm("Oyunu Kazandın. Tekrar denemek ister misin ? ")) {
+                    this.player_heal = 100;
+                    this.monster_heal = 100;
+                }
+            }else if(value >= 100){
+                this.value = 100;
+            }
+        },
+        
+    },
+    computed : {
+        player_progress : function(){
+           return{width : this.player_heal+"%"} 
+        },
+        monster_progress : function(){
+            return{width : this.monster_heal+"%"} 
+
 
         }
     }
