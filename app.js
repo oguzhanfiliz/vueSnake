@@ -76,7 +76,7 @@ new Vue({
                     this.player_heal = 100;
                     this.monster_heal = 100;
                 }
-            }else if(value >= 100){
+            }else if(value >= 100){ 
                 this.value = 100;
             }
         },
@@ -87,7 +87,7 @@ new Vue({
            return{width : this.player_heal+"%"} 
         },
         monster_progress : function(){
-            return{width : this.monster_heal+"%"} 
+            return{width : this.monster_heal+"%"}  
 
 
         }
