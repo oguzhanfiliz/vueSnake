@@ -5,7 +5,7 @@ new Vue({
         monster_heal: 100,
         logs: [],
         game_is_on: false,
-        attack_multiple: 10,
+        attack_multiple: 11,
         special_attach_multiple: 25,
         monster_attach_multiple: 10,
         first_aid_num: 0,
